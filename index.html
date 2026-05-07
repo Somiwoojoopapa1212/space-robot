@@ -204,6 +204,8 @@
   <div class="stage-row" id="row-2"></div>
   <div class="world-label">🔥 월드 3 — 바위 행성</div>
   <div class="stage-row" id="row-3"></div>
+  <div class="world-label">🌋 월드 4 — 용암 행성</div>
+  <div class="stage-row" id="row-4"></div>
 
   <div class="world-label">♾️ 무한 도전</div>
   <div class="infinite-card" onclick="startInfiniteMode()">
@@ -322,36 +324,53 @@
    스테이지 데이터
 ══════════════════════════════ */
 const STAGES = [
-  {id:1,world:1,name:'오른쪽으로 출발!',
-   rows:1,cols:3,start:{r:0,c:0},goals:[{r:0,c:2}],obstacles:[],bestCount:2,
-   hints:['오른쪽으로 이동해봐요!','오른쪽 명령이 2번 필요해요.','정답: ➡️ → ➡️']},
-  {id:2,world:1,name:'아래로 내려가요!',
-   rows:3,cols:1,start:{r:0,c:0},goals:[{r:2,c:0}],obstacles:[],bestCount:2,
-   hints:['아래로 내려가봐요!','아래 명령이 2번 필요해요.','정답: ⬇️ → ⬇️']},
-  {id:3,world:1,name:'꺾어서 별 먹기',
-   rows:2,cols:2,start:{r:0,c:0},goals:[{r:1,c:1}],obstacles:[],bestCount:2,
-   hints:['오른쪽으로 가볼까요?','오른쪽 다음 아래로!','정답: ➡️ → ⬇️']},
-  {id:4,world:2,name:'별 2개 모으기',
-   rows:2,cols:3,start:{r:0,c:0},goals:[{r:0,c:2},{r:1,c:2}],obstacles:[],bestCount:3,
-   hints:['위의 별을 먼저 먹어봐요!','오른쪽 두 번, 아래 한 번!','정답: ➡️ → ➡️ → ⬇️']},
-  {id:5,world:2,name:'바위 피해서 별 먹기',
-   rows:2,cols:3,start:{r:0,c:0},goals:[{r:0,c:2}],obstacles:[{r:0,c:1}],bestCount:4,
-   hints:['바위가 길을 막았어요!','아래로 먼저 내려가봐요.','정답: ⬇️ → ➡️ → ➡️ → ⬆️']},
-  {id:6,world:2,name:'돌아가는 길 찾기',
-   rows:2,cols:3,start:{r:0,c:0},goals:[{r:1,c:2}],obstacles:[{r:0,c:2}],bestCount:3,
-   hints:['오른쪽 끝이 막혔어요!','아래로 먼저 가봐요.','정답: ⬇️ → ➡️ → ➡️']},
-  {id:7,world:3,name:'별 2개, 바위 조심!',
-   rows:3,cols:3,start:{r:0,c:0},goals:[{r:0,c:2},{r:2,c:0}],obstacles:[{r:1,c:0},{r:1,c:2}],bestCount:6,
-   hints:['가운데 길을 활용해봐요!','오른쪽 별을 먼저 먹어요.','정답: ➡️→➡️→⬇️→⬅️→⬅️→⬇️']},
-  {id:8,world:3,name:'멀리 돌아서 별 먹기',
-   rows:3,cols:3,start:{r:0,c:0},goals:[{r:2,c:0}],obstacles:[{r:1,c:0},{r:1,c:1}],bestCount:6,
-   hints:['아래로 가면 바위가 있어요!','오른쪽으로 돌아가요.','정답: ➡️→➡️→⬇️→⬇️→⬅️→⬅️']},
-  {id:9,world:3,name:'별 3개 모두 모아라!',
-   rows:3,cols:3,start:{r:0,c:0},goals:[{r:0,c:2},{r:2,c:0},{r:2,c:2}],obstacles:[{r:1,c:1}],bestCount:8,
-   hints:['별을 하나씩 모아봐요!','가운데 바위를 조심하세요.','힌트: ➡️➡️⬇️⬇️⬅️⬅️➡️➡️']},
-  {id:10,world:3,name:'🔥 보스 스테이지!',
-   rows:3,cols:4,start:{r:0,c:0},goals:[{r:0,c:2},{r:2,c:0},{r:2,c:3}],obstacles:[{r:1,c:1}],bestCount:10,
-   hints:['별이 3개예요! 차근차근!','위의 별부터 먼저 먹어요.','힌트: ➡️➡️⬇️⬇️⬅️⬅️➡️➡️➡️➡️']},
+  // ── World 1 · 별빛 행성 ── 기초 이동
+  {id:1,world:1,name:'오른쪽으로 출발!',rows:1,cols:3,start:{r:0,c:0},goals:[{r:0,c:2}],obstacles:[],bestCount:2,
+   hints:['오른쪽으로 이동해봐요!','오른쪽 명령이 2번 필요해요.','정답: ➡️➡️']},
+  {id:2,world:1,name:'아래로 내려가요!',rows:3,cols:1,start:{r:0,c:0},goals:[{r:2,c:0}],obstacles:[],bestCount:2,
+   hints:['아래로 내려가봐요!','아래 명령이 2번 필요해요.','정답: ⬇️⬇️']},
+  {id:3,world:1,name:'꺾어서 별 먹기',rows:2,cols:2,start:{r:0,c:0},goals:[{r:1,c:1}],obstacles:[],bestCount:2,
+   hints:['오른쪽과 아래를 조합해봐요!','명령 2번으로 도달해요.','정답: ➡️⬇️']},
+  {id:4,world:1,name:'아래 다음 오른쪽!',rows:2,cols:3,start:{r:0,c:0},goals:[{r:1,c:2}],obstacles:[],bestCount:3,
+   hints:['아래로 먼저 가볼까요?','⬇️➡️➡️ 순서로 해봐요.','정답: ⬇️➡️➡️']},
+  {id:5,world:1,name:'대각선 끝까지!',rows:3,cols:3,start:{r:0,c:0},goals:[{r:2,c:2}],obstacles:[],bestCount:4,
+   hints:['오른쪽 또는 아래 먼저!','같은 방향 2번씩 조합해요.','정답: ➡️➡️⬇️⬇️']},
+
+  // ── World 2 · 보석 행성 ── 별 2개
+  {id:6,world:2,name:'별이 두 개!',rows:1,cols:4,start:{r:0,c:0},goals:[{r:0,c:2},{r:0,c:3}],obstacles:[],bestCount:3,
+   hints:['오른쪽으로 쭉 이동해봐요!','별 2개가 나란히 있어요.','정답: ➡️➡️➡️']},
+  {id:7,world:2,name:'세로로 별 두 개',rows:2,cols:3,start:{r:0,c:0},goals:[{r:0,c:2},{r:1,c:2}],obstacles:[],bestCount:3,
+   hints:['오른쪽 끝까지 가봐요!','오른쪽 열에 별 2개가 있어요.','정답: ➡️➡️⬇️']},
+  {id:8,world:2,name:'대각선 별 두 개',rows:3,cols:3,start:{r:0,c:0},goals:[{r:0,c:2},{r:2,c:0}],obstacles:[],bestCount:6,
+   hints:['별 하나를 먼저 먹고 돌아와요!','오른쪽 끝 별 먼저, 그다음 왼쪽 아래로!','정답: ➡️➡️⬇️⬇️⬅️⬅️']},
+  {id:9,world:2,name:'아래 별 먼저!',rows:2,cols:4,start:{r:0,c:0},goals:[{r:0,c:3},{r:1,c:0}],obstacles:[],bestCount:5,
+   hints:['아래로 내려가면 별이 있어요!','아래 → 오른쪽 끝 → 위로!','정답: ⬇️➡️➡️➡️⬆️']},
+  {id:10,world:2,name:'대각선 2단 점프!',rows:3,cols:3,start:{r:0,c:0},goals:[{r:1,c:1},{r:2,c:2}],obstacles:[],bestCount:4,
+   hints:['대각선 방향으로 이동해봐요!','⬇️➡️ 를 2번 반복해요.','정답: ⬇️➡️⬇️➡️']},
+
+  // ── World 3 · 바위 행성 ── 장애물
+  {id:11,world:3,name:'바위 피해서!',rows:2,cols:3,start:{r:0,c:0},goals:[{r:0,c:2}],obstacles:[{r:0,c:1}],bestCount:4,
+   hints:['앞이 바위로 막혔어요!','아래로 돌아가봐요.','정답: ⬇️➡️➡️⬆️']},
+  {id:12,world:3,name:'가운데 바위',rows:3,cols:3,start:{r:0,c:0},goals:[{r:2,c:2}],obstacles:[{r:1,c:1}],bestCount:4,
+   hints:['가운데가 막혔어요!','가장자리로 우회해요.','정답: ➡️➡️⬇️⬇️']},
+  {id:13,world:3,name:'대각선 길 막기',rows:3,cols:4,start:{r:0,c:0},goals:[{r:2,c:3}],obstacles:[{r:0,c:3},{r:1,c:2}],bestCount:5,
+   hints:['오른쪽 대각선이 막혔어요!','아래로 먼저 내려가 우회하세요.','정답: ⬇️⬇️➡️➡️➡️']},
+  {id:14,world:3,name:'오른쪽 위 막기',rows:3,cols:3,start:{r:0,c:0},goals:[{r:2,c:2}],obstacles:[{r:0,c:2},{r:1,c:1}],bestCount:4,
+   hints:['오른쪽과 중간이 막혔어요!','아래로 두 번, 오른쪽 두 번!','정답: ⬇️⬇️➡️➡️']},
+  {id:15,world:3,name:'지그재그 미로',rows:4,cols:3,start:{r:0,c:0},goals:[{r:3,c:2}],obstacles:[{r:1,c:0},{r:2,c:1}],bestCount:5,
+   hints:['왼쪽 길이 막혔어요!','오른쪽 열로 내려가봐요.','정답: ➡️➡️⬇️⬇️⬇️']},
+
+  // ── World 4 · 용암 행성 ── 복합 도전
+  {id:16,world:4,name:'두 별 돌아서 먹기',rows:3,cols:4,start:{r:0,c:0},goals:[{r:0,c:3},{r:2,c:1}],obstacles:[{r:0,c:2},{r:1,c:2}],bestCount:7,
+   hints:['두 별이 장애물 뒤에 있어요!','아래로 돌아 두 별 모두 먹어요.','정답: ⬇️⬇️➡️➡️➡️⬆️⬆️']},
+  {id:17,world:4,name:'양쪽 막힌 미로',rows:4,cols:4,start:{r:0,c:0},goals:[{r:3,c:2},{r:3,c:3}],obstacles:[{r:1,c:0},{r:1,c:2},{r:2,c:3}],bestCount:6,
+   hints:['양쪽 길이 막혔어요!','가운데 열로 돌파해요.','정답: ➡️⬇️⬇️⬇️➡️➡️']},
+  {id:18,world:4,name:'왼쪽 막힌 구역',rows:4,cols:4,start:{r:0,c:0},goals:[{r:3,c:2}],obstacles:[{r:2,c:0},{r:2,c:1}],bestCount:5,
+   hints:['왼쪽 아래가 막혔어요!','가운데 열로 우회해요.','정답: ⬇️➡️➡️⬇️⬇️']},
+  {id:19,world:4,name:'별 3개 모아라!',rows:4,cols:4,start:{r:0,c:0},goals:[{r:3,c:0},{r:3,c:1},{r:3,c:2}],obstacles:[{r:0,c:1},{r:1,c:2},{r:2,c:3}],bestCount:5,
+   hints:['별 3개가 아래 줄에!','왼쪽 열로 곧장 내려가요.','정답: ⬇️⬇️⬇️➡️➡️']},
+  {id:20,world:4,name:'🔥 최종 보스!',rows:4,cols:4,start:{r:0,c:0},goals:[{r:3,c:0},{r:3,c:2},{r:3,c:3}],obstacles:[{r:0,c:3},{r:1,c:1},{r:2,c:2}],bestCount:6,
+   hints:['별 3개! 미로처럼 막혔어요!','아래로 먼저 내려가는 게 핵심이에요.','정답: ⬇️⬇️⬇️➡️➡️➡️']},
 ];
 
 const FAIL_MSGS  = ['우주봇이 길을 조금 헷갈렸어요!','거의 다 왔어요. 한 번만 바꿔볼까요?','바위에 막혔어요. 돌아가는 길을 찾아봐요!','명령 순서를 다시 생각해봐요!'];
@@ -398,7 +417,7 @@ let generatedHints = [];
 ══════════════════ */
 function renderHome(){
   document.getElementById('inf-best-home').textContent = infBest;
-  [1,2,3].forEach(world=>{
+  [1,2,3,4].forEach(world=>{
     const row = document.getElementById(`row-${world}`);
     row.innerHTML = STAGES.filter(s=>s.world===world).map(s=>{
       const unlocked = progress.unlocked.includes(s.id);
