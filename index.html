@@ -429,9 +429,12 @@ function renderGrid() {
   const s = currentStage;
   const grid = document.getElementById('game-grid');
 
-  // 셀 크기 계산
+  // 셀 크기 계산 (가로·세로 양쪽 제한 후 최솟값 사용)
   const maxW = Math.min(window.innerWidth - 32, 340);
-  const cellSize = Math.floor((maxW - (s.cols-1)*4) / s.cols);
+  const maxH = 260;
+  const cellByW = Math.floor((maxW - (s.cols - 1) * 4) / s.cols);
+  const cellByH = Math.floor((maxH - (s.rows - 1) * 4) / s.rows);
+  const cellSize = Math.min(cellByW, cellByH, 100);
   grid.style.gridTemplateColumns = `repeat(${s.cols}, ${cellSize}px)`;
 
   let html = '';
