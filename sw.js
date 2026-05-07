@@ -1,4 +1,4 @@
-const CACHE_NAME = 'space-robot-20260507012235';
+const CACHE_NAME = 'space-robot-20260507012646';
 const ASSETS = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('install', e => {
