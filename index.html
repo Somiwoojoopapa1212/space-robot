@@ -35,7 +35,7 @@
        홈 / 스테이지 선택
     ══════════════════ */
     #s-home{padding:28px 20px 40px;gap:16px;}
-    .home-logo{font-size:60px;animation:float 3s ease-in-out infinite;}
+    .home-logo{width:120px;height:120px;border-radius:26px;display:block;margin:0 auto;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(52,211,153,.45));}
     @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
     .home-title{font-size:28px;color:var(--accent);text-shadow:0 0 18px rgba(251,191,36,.5);text-align:center;}
     .home-sub{font-size:13px;color:var(--muted);text-align:center;line-height:1.6;max-width:280px;}
@@ -175,7 +175,7 @@
      홈 / 스테이지 선택
 ══════════════════════════════ -->
 <div class="screen active" id="s-home">
-  <div class="home-logo">🤖</div>
+  <img class="home-logo" src="icons/icon-512.png" alt="우주 로봇 미션" />
   <div class="home-title">우주 로봇 미션</div>
   <div class="home-sub">명령을 순서대로 놓아<br>우주봇이 ⭐ 별을 찾도록 도와주세요!</div>
 
