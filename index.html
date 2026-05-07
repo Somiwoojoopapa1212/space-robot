@@ -12,194 +12,214 @@
   <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet"/>
   <title>🚀 우주 로봇 미션</title>
   <style>
-    :root {
-      --bg:#090920; --card:rgba(255,255,255,.07); --border:rgba(255,255,255,.12);
-      --accent:#fbbf24; --green:#4ade80; --blue:#60a5fa;
-      --pink:#f472b6; --orange:#fb923c; --red:#f87171;
-      --text:#f0f0ff; --muted:rgba(240,240,255,.5);
-    }
+    :root{--bg:#090920;--card:rgba(255,255,255,.07);--border:rgba(255,255,255,.12);
+      --accent:#fbbf24;--green:#4ade80;--blue:#60a5fa;--pink:#f472b6;--orange:#fb923c;
+      --teal:#34d399;--text:#f0f0ff;--muted:rgba(240,240,255,.5);}
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none;}
     html,body{width:100%;height:100%;overflow:hidden;font-family:'Jua','Apple SD Gothic Neo',sans-serif;background:var(--bg);color:var(--text);}
 
-    /* ── 스타 배경 ── */
+    /* 별 배경 */
     #stars{position:fixed;inset:0;pointer-events:none;z-index:0;}
     .star{position:absolute;background:#fff;border-radius:50%;animation:twinkle 3s ease-in-out infinite;}
     @keyframes twinkle{0%,100%{opacity:.2}50%{opacity:.9}}
 
-    /* ── 화면 공통 ── */
+    /* 화면 공통 */
     .screen{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;z-index:1;
       overflow-y:auto;padding:env(safe-area-inset-top,0px) 0 0;}
     .screen.active{display:flex;}
 
-    /* ══════════════════
-       홈 / 스테이지 선택
-    ══════════════════ */
-    #s-home{padding:28px 20px 40px;gap:16px;}
-    .home-logo{width:120px;height:120px;border-radius:26px;display:block;margin:0 auto;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(52,211,153,.45));}
+    /* ══ 홈 ══ */
+    #s-home{padding:28px 20px 48px;gap:14px;}
+    .home-logo{width:100px;height:100px;border-radius:24px;display:block;margin:0 auto;
+      animation:float 3s ease-in-out infinite;filter:drop-shadow(0 0 18px rgba(52,211,153,.45));}
     @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-    .home-title{font-size:28px;color:var(--accent);text-shadow:0 0 18px rgba(251,191,36,.5);text-align:center;}
+    .home-title{font-size:26px;color:var(--accent);text-shadow:0 0 18px rgba(251,191,36,.5);text-align:center;}
     .home-sub{font-size:13px;color:var(--muted);text-align:center;line-height:1.6;max-width:280px;}
 
-    .world-label{font-size:13px;color:var(--muted);align-self:flex-start;margin-bottom:-8px;padding-left:2px;}
+    .world-label{font-size:12px;color:var(--muted);align-self:flex-start;margin-bottom:-6px;padding-left:2px;}
     .stage-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;width:100%;max-width:360px;}
-
     .stage-card{background:var(--card);border:1.5px solid var(--border);border-radius:14px;
       padding:10px 4px;text-align:center;cursor:pointer;transition:all .15s;position:relative;}
     .stage-card:active{transform:scale(.93);}
     .stage-card.unlocked{border-color:rgba(251,191,36,.35);}
     .stage-card.unlocked:hover{border-color:var(--accent);background:rgba(251,191,36,.1);}
-    .stage-card.locked{opacity:.45;cursor:default;}
+    .stage-card.locked{opacity:.4;cursor:default;}
     .stage-card.cleared{border-color:rgba(74,222,128,.4);}
     .stage-num{font-size:16px;font-weight:700;}
     .stage-stars{font-size:11px;min-height:14px;margin-top:2px;letter-spacing:-1px;}
     .stage-lock{font-size:16px;}
 
+    /* 무한 모드 카드 */
+    .infinite-card{display:flex;align-items:center;gap:14px;width:100%;max-width:360px;
+      background:linear-gradient(135deg,rgba(52,211,153,.15),rgba(96,165,250,.15));
+      border:1.5px solid rgba(52,211,153,.4);border-radius:18px;padding:16px 18px;
+      cursor:pointer;transition:all .2s;}
+    .infinite-card:hover{border-color:var(--teal);box-shadow:0 8px 32px rgba(52,211,153,.2);}
+    .infinite-card:active{transform:scale(.97);}
+    .inf-icon{font-size:40px;flex-shrink:0;}
+    .inf-info{flex:1;}
+    .inf-title{font-size:17px;color:var(--teal);}
+    .inf-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+    .inf-arrow{font-size:20px;color:var(--teal);flex-shrink:0;}
+
+    /* 버튼 */
     .btn-primary{background:var(--accent);color:#1a0800;border:none;border-radius:50px;
       font-family:'Jua',sans-serif;font-size:18px;padding:14px 40px;cursor:pointer;
       box-shadow:0 4px 0 #8a6200,0 6px 20px rgba(251,191,36,.35);transition:transform .1s;}
     .btn-primary:active{transform:scale(.94);}
 
-    /* ══════════════════
-       게임 화면
-    ══════════════════ */
+    /* ══ 게임 화면 ══ */
     #s-game{padding:0;justify-content:flex-start;gap:0;}
 
     .game-header{display:flex;align-items:center;justify-content:space-between;
-      width:100%;padding:12px 16px;flex-shrink:0;
-      padding-top:calc(12px + env(safe-area-inset-top,0px));}
+      width:100%;padding:10px 16px;flex-shrink:0;
+      padding-top:calc(10px + env(safe-area-inset-top,0px));}
     .btn-icon{background:var(--card);border:1px solid var(--border);border-radius:10px;
-      font-size:18px;padding:8px 12px;cursor:pointer;color:var(--text);font-family:inherit;}
-    .stage-title{font-size:15px;color:var(--accent);text-align:center;}
+      font-size:16px;padding:7px 11px;cursor:pointer;color:var(--text);font-family:inherit;}
+    .stage-title{font-size:14px;color:var(--accent);text-align:center;line-height:1.3;}
     .stage-goal{font-size:11px;color:var(--muted);text-align:center;margin-top:1px;}
 
-    /* 게임 그리드 */
+    /* 무한모드 헤더 배지 */
+    .inf-badge{display:inline-block;background:rgba(52,211,153,.2);border:1px solid var(--teal);
+      border-radius:20px;font-size:11px;color:var(--teal);padding:2px 10px;margin-top:3px;}
+    .inf-lives{font-size:20px;letter-spacing:1px;}
+
+    /* 그리드 */
     .grid-wrap{flex-shrink:0;display:flex;align-items:center;justify-content:center;
-      padding:8px 16px;width:100%;}
+      padding:6px 16px;width:100%;}
     .game-grid{display:grid;gap:4px;}
     .cell{display:flex;align-items:center;justify-content:center;
       background:rgba(255,255,255,.06);border-radius:10px;
-      font-size:32px;line-height:1;transition:transform .15s;}
-    .cell.obstacle{background:rgba(100,100,120,.25);}
+      font-size:32px;line-height:1;transition:background .2s;}
+    .cell.obstacle{background:rgba(100,100,120,.3);}
     .cell.goal{background:rgba(251,191,36,.12);animation:pulse-goal 2s ease-in-out infinite;}
-    .cell.collected{background:rgba(74,222,128,.12);}
-    .cell.robot{background:rgba(96,165,250,.15);}
-    @keyframes pulse-goal{0%,100%{box-shadow:0 0 0 0 rgba(251,191,36,.4)}50%{box-shadow:0 0 0 6px rgba(251,191,36,0)}}
+    .cell.collected{background:rgba(74,222,128,.1);}
+    .cell.robot{background:rgba(52,211,153,.15);}
+    @keyframes pulse-goal{0%,100%{box-shadow:0 0 0 0 rgba(251,191,36,.4)}50%{box-shadow:0 0 0 5px rgba(251,191,36,0)}}
+    .robot-img{object-fit:contain;display:block;}
 
     /* 명령 줄 */
-    .cmd-section{flex-shrink:0;width:100%;padding:0 16px;margin-bottom:8px;}
-    .cmd-label{font-size:11px;color:var(--muted);margin-bottom:5px;}
-    .cmd-queue{display:flex;gap:6px;overflow-x:auto;padding:8px 10px;
+    .cmd-section{flex-shrink:0;width:100%;padding:0 16px;margin-bottom:6px;}
+    .cmd-label{font-size:11px;color:var(--muted);margin-bottom:4px;}
+    .cmd-queue{display:flex;gap:6px;overflow-x:auto;padding:7px 10px;
       background:rgba(255,255,255,.05);border:1px solid var(--border);
-      border-radius:12px;min-height:50px;align-items:center;
-      scrollbar-width:none;}
+      border-radius:12px;min-height:48px;align-items:center;scrollbar-width:none;}
     .cmd-queue::-webkit-scrollbar{display:none;}
     .cmd-item{display:flex;flex-direction:column;align-items:center;gap:1px;
       background:rgba(255,255,255,.12);border-radius:8px;
-      padding:5px 8px;flex-shrink:0;animation:popIn .15s ease;}
+      padding:4px 8px;flex-shrink:0;animation:popIn .15s ease;}
     @keyframes popIn{from{transform:scale(0)}to{transform:scale(1)}}
-    .cmd-emoji{font-size:18px;line-height:1;}
+    .cmd-emoji{font-size:16px;line-height:1;}
     .cmd-text{font-size:9px;color:var(--muted);}
     .cmd-empty{font-size:12px;color:var(--muted);margin:auto;}
 
     /* D패드 */
-    .dpad-wrap{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:0;padding:0 16px;width:100%;}
-    .dpad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%;max-width:260px;}
+    .dpad-wrap{flex-shrink:0;display:flex;flex-direction:column;align-items:center;padding:0 16px;width:100%;}
+    .dpad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%;max-width:240px;}
     .dpad-cell{display:flex;align-items:center;justify-content:center;}
-    .cmd-btn{font-size:22px;border:none;border-radius:14px;padding:12px;
-      cursor:pointer;font-family:inherit;transition:transform .1s,opacity .1s;
+    .cmd-btn{font-size:20px;border:none;border-radius:14px;padding:10px;
+      cursor:pointer;font-family:inherit;transition:transform .1s;
       display:flex;align-items:center;justify-content:center;width:100%;aspect-ratio:1;}
     .cmd-btn:active{transform:scale(.88);}
     .cmd-btn.up   {background:linear-gradient(135deg,#4ade80,#16a34a);color:#fff;}
     .cmd-btn.down {background:linear-gradient(135deg,#60a5fa,#2563eb);color:#fff;}
     .cmd-btn.left {background:linear-gradient(135deg,#f472b6,#db2777);color:#fff;}
     .cmd-btn.right{background:linear-gradient(135deg,#fb923c,#ea580c);color:#fff;}
-    .cmd-btn.del  {background:rgba(255,255,255,.12);color:var(--text);font-size:18px;}
+    .cmd-btn.del  {background:rgba(255,255,255,.12);color:var(--text);font-size:16px;}
     .cmd-btn:disabled{opacity:.35;cursor:not-allowed;}
 
     /* 실행 버튼 */
-    .action-row{flex-shrink:0;display:flex;gap:10px;padding:10px 16px;width:100%;max-width:400px;}
+    .action-row{flex-shrink:0;display:flex;gap:10px;padding:8px 16px;width:100%;max-width:400px;}
     .btn-run{flex:2;background:linear-gradient(135deg,var(--accent),#f59e0b);color:#1a0800;
-      border:none;border-radius:14px;font-size:18px;font-family:'Jua',sans-serif;
-      padding:14px;cursor:pointer;box-shadow:0 4px 16px rgba(251,191,36,.4);
-      transition:transform .1s;}
+      border:none;border-radius:14px;font-size:17px;font-family:'Jua',sans-serif;
+      padding:13px;cursor:pointer;box-shadow:0 4px 16px rgba(251,191,36,.4);transition:transform .1s;}
     .btn-run:active{transform:scale(.95);}
     .btn-run:disabled{opacity:.4;cursor:not-allowed;}
     .btn-clear{flex:1;background:rgba(255,255,255,.1);color:var(--text);
       border:1px solid var(--border);border-radius:14px;
-      font-size:14px;font-family:'Jua',sans-serif;padding:14px;cursor:pointer;}
+      font-size:13px;font-family:'Jua',sans-serif;padding:13px;cursor:pointer;}
     .btn-clear:active{transform:scale(.95);}
 
-    /* ══════════════════
-       팝업
-    ══════════════════ */
-    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);
+    /* ══ 팝업 ══ */
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);
       display:none;align-items:center;justify-content:center;z-index:100;padding:20px;}
     .overlay.show{display:flex;}
     .popup{background:#1a1040;border:1.5px solid rgba(255,255,255,.15);
-      border-radius:24px;padding:28px 24px;text-align:center;
-      width:100%;max-width:320px;display:flex;flex-direction:column;gap:14px;
+      border-radius:24px;padding:26px 22px;text-align:center;
+      width:100%;max-width:320px;display:flex;flex-direction:column;gap:12px;
       box-shadow:0 20px 60px rgba(0,0,0,.5);}
-    .popup-emoji{font-size:64px;animation:pop .4s cubic-bezier(.36,.07,.19,.97);}
+    .popup-emoji{font-size:60px;animation:pop .4s cubic-bezier(.36,.07,.19,.97);}
     @keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.15)}100%{transform:scale(1)}}
     .popup-title{font-size:22px;}
-    .popup-msg{font-size:14px;color:var(--muted);line-height:1.65;}
-    .popup-stars{font-size:32px;letter-spacing:4px;min-height:38px;}
+    .popup-msg{font-size:13px;color:var(--muted);line-height:1.65;}
+    .popup-stars{font-size:30px;letter-spacing:4px;min-height:36px;}
     .popup-btns{display:flex;flex-direction:column;gap:8px;}
     .btn-next{background:var(--green);color:#052e16;border:none;border-radius:12px;
       font-family:'Jua',sans-serif;font-size:17px;padding:14px;cursor:pointer;}
     .btn-retry{background:rgba(255,255,255,.1);color:var(--text);border:1px solid var(--border);
-      border-radius:12px;font-family:'Jua',sans-serif;font-size:15px;padding:12px;cursor:pointer;}
+      border-radius:12px;font-family:'Jua',sans-serif;font-size:14px;padding:11px;cursor:pointer;}
     .btn-home-p{background:none;color:var(--muted);border:none;
       font-family:'Jua',sans-serif;font-size:13px;cursor:pointer;padding:4px;}
-
-    /* ── 힌트 팝업 ── */
+    /* 무한모드 생명 표시 */
+    .popup-lives{font-size:22px;letter-spacing:3px;}
+    /* 힌트 */
     .hint-steps{display:flex;flex-direction:column;gap:8px;text-align:left;}
     .hint-row{display:flex;align-items:flex-start;gap:10px;
       background:rgba(255,255,255,.05);border-radius:10px;padding:10px 12px;font-size:13px;}
     .hint-num{color:var(--accent);font-weight:700;flex-shrink:0;width:18px;}
     .hint-locked{color:var(--muted);}
+    /* 무한모드 게임오버 */
+    .gameover-score{font-size:40px;color:var(--teal);font-weight:900;
+      text-shadow:0 0 18px rgba(52,211,153,.6);}
 
-    /* 반응형 */
     @media(max-height:680px){
-      .home-logo{font-size:40px;}
-      .cmd-btn{padding:8px;}
-      .action-row{padding:6px 16px;}
+      .home-logo{width:70px;height:70px;}
+      .cmd-btn{padding:7px;}
+      .action-row{padding:5px 16px;}
+      .game-header{padding-top:calc(6px + env(safe-area-inset-top,0px));}
     }
   </style>
 </head>
 <body>
-
 <div id="stars"></div>
 
-<!-- ══════════════════════════════
-     홈 / 스테이지 선택
-══════════════════════════════ -->
+<!-- ══ 홈 ══ -->
 <div class="screen active" id="s-home">
-  <img class="home-logo" src="icons/icon-512.png" alt="우주 로봇 미션" />
+  <img class="home-logo" src="icons/icon-512.png" alt="우주 로봇 미션"/>
   <div class="home-title">우주 로봇 미션</div>
   <div class="home-sub">명령을 순서대로 놓아<br>우주봇이 ⭐ 별을 찾도록 도와주세요!</div>
 
   <div class="world-label">🌟 월드 1 — 별빛 행성</div>
   <div class="stage-row" id="row-1"></div>
-
   <div class="world-label">💎 월드 2 — 보석 행성</div>
   <div class="stage-row" id="row-2"></div>
-
   <div class="world-label">🔥 월드 3 — 바위 행성</div>
   <div class="stage-row" id="row-3"></div>
+
+  <div class="world-label">♾️ 무한 도전</div>
+  <div class="infinite-card" onclick="startInfiniteMode()">
+    <div class="inf-icon">🚀</div>
+    <div class="inf-info">
+      <div class="inf-title">무한 도전 모드</div>
+      <div class="inf-sub">랜덤 맵 · 라이프 3개 · 최고기록: <span id="inf-best-home">0</span>단계</div>
+    </div>
+    <div class="inf-arrow">▶</div>
+  </div>
 </div>
 
-<!-- ══════════════════════════════
-     게임 화면
-══════════════════════════════ -->
+<!-- ══ 게임 화면 ══ -->
 <div class="screen" id="s-game">
   <div class="game-header">
     <button class="btn-icon" onclick="goHome()">🏠</button>
     <div>
       <div class="stage-title" id="stage-title">스테이지 1</div>
       <div class="stage-goal" id="stage-goal">⭐ 별을 모아요</div>
+      <div class="inf-badge" id="inf-badge" style="display:none">♾️ 무한 도전</div>
     </div>
-    <button class="btn-icon" id="btn-hint" onclick="openHint()">❓</button>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+      <button class="btn-icon" id="btn-hint" onclick="openHint()">❓</button>
+      <div class="inf-lives" id="inf-lives-hud" style="display:none">❤️❤️❤️</div>
+    </div>
   </div>
 
   <div class="grid-wrap">
@@ -216,13 +236,13 @@
   <div class="dpad-wrap">
     <div class="dpad">
       <div class="dpad-cell"></div>
-      <div class="dpad-cell"><button class="cmd-btn up" onclick="addCmd('up')">⬆️</button></div>
+      <div class="dpad-cell"><button class="cmd-btn up"    onclick="addCmd('up')">⬆️</button></div>
       <div class="dpad-cell"></div>
-      <div class="dpad-cell"><button class="cmd-btn left" onclick="addCmd('left')">⬅️</button></div>
-      <div class="dpad-cell"><button class="cmd-btn del" onclick="delCmd()">↩️</button></div>
+      <div class="dpad-cell"><button class="cmd-btn left"  onclick="addCmd('left')">⬅️</button></div>
+      <div class="dpad-cell"><button class="cmd-btn del"   onclick="delCmd()">↩️</button></div>
       <div class="dpad-cell"><button class="cmd-btn right" onclick="addCmd('right')">➡️</button></div>
       <div class="dpad-cell"></div>
-      <div class="dpad-cell"><button class="cmd-btn down" onclick="addCmd('down')">⬇️</button></div>
+      <div class="dpad-cell"><button class="cmd-btn down"  onclick="addCmd('down')">⬇️</button></div>
       <div class="dpad-cell"></div>
     </div>
   </div>
@@ -253,10 +273,26 @@
   <div class="popup">
     <div class="popup-emoji">🤖</div>
     <div class="popup-title">거의 다 왔어요!</div>
+    <div class="popup-lives" id="fail-lives" style="display:none"></div>
     <div class="popup-msg" id="fail-msg">명령 순서를 다시 생각해봐요!</div>
     <div class="popup-btns">
       <button class="btn-next" style="background:var(--blue)" onclick="retryStage()">🔁 다시 도전!</button>
       <button class="btn-retry" onclick="openHint()">❓ 힌트 보기</button>
+      <button class="btn-home-p" onclick="goHome()">🏠 홈으로</button>
+    </div>
+  </div>
+</div>
+
+<!-- 무한모드 게임오버 팝업 -->
+<div class="overlay" id="pop-gameover">
+  <div class="popup">
+    <div class="popup-emoji">🌌</div>
+    <div class="popup-title">우주 여행 완료!</div>
+    <div class="popup-msg">도달한 최고 단계</div>
+    <div class="gameover-score" id="gameover-score">0단계</div>
+    <div class="popup-msg" id="gameover-best"></div>
+    <div class="popup-btns">
+      <button class="btn-next" style="background:var(--teal);color:#052e16" onclick="startInfiniteMode()">🚀 다시 도전!</button>
       <button class="btn-home-p" onclick="goHome()">🏠 홈으로</button>
     </div>
   </div>
@@ -277,340 +313,475 @@
    스테이지 데이터
 ══════════════════════════════ */
 const STAGES = [
-  { id:1, world:1, name:'오른쪽으로 출발!',
-    rows:1, cols:3, start:{r:0,c:0}, goals:[{r:0,c:2}], obstacles:[], bestCount:2,
-    hints:['오른쪽으로 이동해봐요!','오른쪽 명령이 2번 필요해요.','정답: ➡️ → ➡️'] },
-
-  { id:2, world:1, name:'아래로 내려가요!',
-    rows:3, cols:1, start:{r:0,c:0}, goals:[{r:2,c:0}], obstacles:[], bestCount:2,
-    hints:['아래로 내려가봐요!','아래 명령이 2번 필요해요.','정답: ⬇️ → ⬇️'] },
-
-  { id:3, world:1, name:'꺾어서 별 먹기',
-    rows:2, cols:2, start:{r:0,c:0}, goals:[{r:1,c:1}], obstacles:[], bestCount:2,
-    hints:['먼저 오른쪽으로 가볼까요?','오른쪽 다음 아래로 이동해요.','정답: ➡️ → ⬇️'] },
-
-  { id:4, world:2, name:'별 2개 모으기',
-    rows:2, cols:3, start:{r:0,c:0}, goals:[{r:0,c:2},{r:1,c:2}], obstacles:[], bestCount:3,
-    hints:['위에 있는 별을 먼저 먹어봐요!','오른쪽으로 두 번, 그리고 아래로!','정답: ➡️ → ➡️ → ⬇️'] },
-
-  { id:5, world:2, name:'바위 피해서 별 먹기',
-    rows:2, cols:3, start:{r:0,c:0}, goals:[{r:0,c:2}], obstacles:[{r:0,c:1}], bestCount:4,
-    hints:['바위가 길을 막았어요!','아래로 먼저 내려가볼까요?','정답: ⬇️ → ➡️ → ➡️ → ⬆️'] },
-
-  { id:6, world:2, name:'돌아가는 길 찾기',
-    rows:2, cols:3, start:{r:0,c:0}, goals:[{r:1,c:2}], obstacles:[{r:0,c:2}], bestCount:3,
-    hints:['오른쪽 끝이 막혔어요!','아래로 먼저 가봐요.','정답: ⬇️ → ➡️ → ➡️'] },
-
-  { id:7, world:3, name:'별 2개, 바위 조심!',
-    rows:3, cols:3, start:{r:0,c:0}, goals:[{r:0,c:2},{r:2,c:0}], obstacles:[{r:1,c:0},{r:1,c:2}], bestCount:6,
-    hints:['가운데 길을 활용해봐요!','오른쪽 별을 먼저 먹어봐요.','정답: ➡️→➡️→⬇️→⬅️→⬅️→⬇️'] },
-
-  { id:8, world:3, name:'멀리 돌아서 별 먹기',
-    rows:3, cols:3, start:{r:0,c:0}, goals:[{r:2,c:0}], obstacles:[{r:1,c:0},{r:1,c:1}], bestCount:6,
-    hints:['아래로 가면 바위가 있어요!','오른쪽으로 돌아가는 길을 찾아봐요.','정답: ➡️→➡️→⬇️→⬇️→⬅️→⬅️'] },
-
-  { id:9, world:3, name:'별 3개 모두 모아라!',
-    rows:3, cols:3, start:{r:0,c:0}, goals:[{r:0,c:2},{r:2,c:0},{r:2,c:2}], obstacles:[{r:1,c:1}], bestCount:8,
-    hints:['별을 하나씩 순서대로 모아봐요!','가운데 바위를 조심하세요.','힌트: ➡️➡️⬇️⬇️⬅️⬅️➡️➡️'] },
-
-  { id:10, world:3, name:'🔥 보스 스테이지!',
-    rows:3, cols:4, start:{r:0,c:0}, goals:[{r:0,c:2},{r:2,c:0},{r:2,c:3}], obstacles:[{r:1,c:1}], bestCount:10,
-    hints:['별이 3개예요! 차근차근 모아봐요.','위의 별부터 먼저 먹어봐요.','힌트: ➡️➡️⬇️⬇️⬅️⬅️➡️➡️➡️➡️'] },
+  {id:1,world:1,name:'오른쪽으로 출발!',
+   rows:1,cols:3,start:{r:0,c:0},goals:[{r:0,c:2}],obstacles:[],bestCount:2,
+   hints:['오른쪽으로 이동해봐요!','오른쪽 명령이 2번 필요해요.','정답: ➡️ → ➡️']},
+  {id:2,world:1,name:'아래로 내려가요!',
+   rows:3,cols:1,start:{r:0,c:0},goals:[{r:2,c:0}],obstacles:[],bestCount:2,
+   hints:['아래로 내려가봐요!','아래 명령이 2번 필요해요.','정답: ⬇️ → ⬇️']},
+  {id:3,world:1,name:'꺾어서 별 먹기',
+   rows:2,cols:2,start:{r:0,c:0},goals:[{r:1,c:1}],obstacles:[],bestCount:2,
+   hints:['오른쪽으로 가볼까요?','오른쪽 다음 아래로!','정답: ➡️ → ⬇️']},
+  {id:4,world:2,name:'별 2개 모으기',
+   rows:2,cols:3,start:{r:0,c:0},goals:[{r:0,c:2},{r:1,c:2}],obstacles:[],bestCount:3,
+   hints:['위의 별을 먼저 먹어봐요!','오른쪽 두 번, 아래 한 번!','정답: ➡️ → ➡️ → ⬇️']},
+  {id:5,world:2,name:'바위 피해서 별 먹기',
+   rows:2,cols:3,start:{r:0,c:0},goals:[{r:0,c:2}],obstacles:[{r:0,c:1}],bestCount:4,
+   hints:['바위가 길을 막았어요!','아래로 먼저 내려가봐요.','정답: ⬇️ → ➡️ → ➡️ → ⬆️']},
+  {id:6,world:2,name:'돌아가는 길 찾기',
+   rows:2,cols:3,start:{r:0,c:0},goals:[{r:1,c:2}],obstacles:[{r:0,c:2}],bestCount:3,
+   hints:['오른쪽 끝이 막혔어요!','아래로 먼저 가봐요.','정답: ⬇️ → ➡️ → ➡️']},
+  {id:7,world:3,name:'별 2개, 바위 조심!',
+   rows:3,cols:3,start:{r:0,c:0},goals:[{r:0,c:2},{r:2,c:0}],obstacles:[{r:1,c:0},{r:1,c:2}],bestCount:6,
+   hints:['가운데 길을 활용해봐요!','오른쪽 별을 먼저 먹어요.','정답: ➡️→➡️→⬇️→⬅️→⬅️→⬇️']},
+  {id:8,world:3,name:'멀리 돌아서 별 먹기',
+   rows:3,cols:3,start:{r:0,c:0},goals:[{r:2,c:0}],obstacles:[{r:1,c:0},{r:1,c:1}],bestCount:6,
+   hints:['아래로 가면 바위가 있어요!','오른쪽으로 돌아가요.','정답: ➡️→➡️→⬇️→⬇️→⬅️→⬅️']},
+  {id:9,world:3,name:'별 3개 모두 모아라!',
+   rows:3,cols:3,start:{r:0,c:0},goals:[{r:0,c:2},{r:2,c:0},{r:2,c:2}],obstacles:[{r:1,c:1}],bestCount:8,
+   hints:['별을 하나씩 모아봐요!','가운데 바위를 조심하세요.','힌트: ➡️➡️⬇️⬇️⬅️⬅️➡️➡️']},
+  {id:10,world:3,name:'🔥 보스 스테이지!',
+   rows:3,cols:4,start:{r:0,c:0},goals:[{r:0,c:2},{r:2,c:0},{r:2,c:3}],obstacles:[{r:1,c:1}],bestCount:10,
+   hints:['별이 3개예요! 차근차근!','위의 별부터 먼저 먹어요.','힌트: ➡️➡️⬇️⬇️⬅️⬅️➡️➡️➡️➡️']},
 ];
 
-const FAIL_MSGS = [
-  '우주봇이 길을 조금 헷갈렸어요!',
-  '거의 다 왔어요. 한 번만 바꿔볼까요?',
-  '바위에 막혔어요. 돌아가는 길을 찾아봐요!',
-  '명령 순서를 다시 생각해봐요!',
-];
-const SUCCESS_MSGS = [
-  '우주봇이 별을 찾았어요! 🌟',
-  '멋져요! 명령을 순서대로 잘 만들었어요!',
-  '대단해요! 우주봇이 임무를 완수했어요!',
-  '우주봇이 신나게 별을 모았어요! 🚀',
-];
-const DEBUG_MSGS = [
-  '고쳐서 성공했어요! 멋진 문제 해결이에요!',
-  '다시 생각해서 성공했어요. 정말 잘했어요!',
-  '수정한 명령이 딱 맞았어요!',
+const FAIL_MSGS  = ['우주봇이 길을 조금 헷갈렸어요!','거의 다 왔어요. 한 번만 바꿔볼까요?','바위에 막혔어요. 돌아가는 길을 찾아봐요!','명령 순서를 다시 생각해봐요!'];
+const SUC_MSGS   = ['우주봇이 별을 찾았어요! 🌟','멋져요! 명령 순서대로 잘 만들었어요!','대단해요! 임무를 완수했어요!','우주봇이 신나게 별을 모았어요! 🚀'];
+const DEBUG_MSGS = ['고쳐서 성공했어요! 멋진 문제 해결이에요!','다시 생각해서 성공! 정말 잘했어요!','수정한 명령이 딱 맞았어요!'];
+const INF_THEMES = [
+  {label:'⭐ 별 하나 먹기', desc:'기본 이동'},
+  {label:'⭐⭐ 별 2개 모으기', desc:'두 목표 동시 공략'},
+  {label:'⭐⭐⭐ 별 3개 모으기', desc:'세 목표 완전 공략'},
+  {label:'🪨 장애물 미로', desc:'막힌 길을 피해 이동'},
+  {label:'🗺️ 넓은 맵 탐험', desc:'더 넓어진 공간'},
+  {label:'🌀 복잡한 경로', desc:'돌아가는 길 찾기'},
 ];
 
 const DIR = {
-  up:   {dr:-1,dc:0, emoji:'⬆️', label:'위'},
-  down: {dr:1, dc:0, emoji:'⬇️', label:'아래'},
-  left: {dr:0, dc:-1,emoji:'⬅️', label:'왼쪽'},
-  right:{dr:0, dc:1, emoji:'➡️', label:'오른쪽'},
+  up:   {dr:-1,dc:0,emoji:'⬆️',label:'위'},
+  down: {dr:1, dc:0,emoji:'⬇️',label:'아래'},
+  left: {dr:0, dc:-1,emoji:'⬅️',label:'왼쪽'},
+  right:{dr:0, dc:1, emoji:'➡️',label:'오른쪽'},
 };
 
-/* ── 저장 ── */
-let progress = JSON.parse(localStorage.getItem('robot_progress') || '{"unlocked":[1],"stars":{}}');
-function saveProgress() { localStorage.setItem('robot_progress', JSON.stringify(progress)); }
+/* ══ 저장 ══ */
+let progress    = JSON.parse(localStorage.getItem('robot_progress') || '{"unlocked":[1],"stars":{}}');
+let infBest     = parseInt(localStorage.getItem('robot_inf_best') || '0');
+function saveProgress(){ localStorage.setItem('robot_progress', JSON.stringify(progress)); }
+function saveInfBest(n){ infBest=n; localStorage.setItem('robot_inf_best', String(n)); }
 
-/* ── 게임 상태 ── */
+/* ══ 게임 상태 ══ */
 let currentStage = null;
-let robotPos = {r:0,c:0};
-let remainGoals = [];
-let commands = [];
-let running = false;
-let failCount = 0;
-let hintLevel = 0;
+let robotPos     = {r:0,c:0};
+let remainGoals  = [];
+let commands     = [];
+let running      = false;
+let failCount    = 0;
+
+// 무한 모드
+let infiniteMode = false;
+let infStage     = 0;
+let infLives     = 3;
+let generatedHints = [];
 
 /* ══════════════════
    홈 화면
 ══════════════════ */
-function renderHome() {
-  [1,2,3].forEach(world => {
+function renderHome(){
+  document.getElementById('inf-best-home').textContent = infBest;
+  [1,2,3].forEach(world=>{
     const row = document.getElementById(`row-${world}`);
-    const stagesInWorld = STAGES.filter(s => s.world === world);
-    row.innerHTML = stagesInWorld.map(s => {
+    row.innerHTML = STAGES.filter(s=>s.world===world).map(s=>{
       const unlocked = progress.unlocked.includes(s.id);
-      const stars = progress.stars[s.id] || 0;
-      const cleared = stars > 0;
-      const cls = !unlocked ? 'locked' : cleared ? 'cleared unlocked' : 'unlocked';
-      const starStr = cleared ? '⭐'.repeat(stars) + '☆'.repeat(3-stars) : '';
+      const stars    = progress.stars[s.id]||0;
+      const cleared  = stars>0;
+      const cls = !unlocked?'locked':cleared?'cleared unlocked':'unlocked';
       return `<div class="stage-card ${cls}" onclick="${unlocked?`loadStage(${s.id})`:''}">
         <div class="stage-num">${s.id}</div>
         ${unlocked
-          ? `<div class="stage-stars">${starStr || '　'}</div>`
+          ? `<div class="stage-stars">${cleared?'⭐'.repeat(stars)+'☆'.repeat(3-stars):'　'}</div>`
           : `<div class="stage-lock">🔒</div>`}
       </div>`;
     }).join('');
   });
 }
 
-function goHome() {
+function goHome(){
   closeAllPopups();
-  running = false;
+  running=false; infiniteMode=false;
+  document.getElementById('inf-badge').style.display='none';
+  document.getElementById('inf-lives-hud').style.display='none';
   showScreen('s-home');
   renderHome();
 }
 
 /* ══════════════════
-   스테이지 로드
+   일반 스테이지
 ══════════════════ */
-function loadStage(id) {
-  currentStage = STAGES.find(s => s.id === id);
-  if (!currentStage) return;
-  failCount = 0; hintLevel = 0;
+function loadStage(id){
+  infiniteMode=false;
+  currentStage=STAGES.find(s=>s.id===id);
+  if(!currentStage) return;
+  failCount=0;
+  generatedHints=currentStage.hints;
+  document.getElementById('inf-badge').style.display='none';
+  document.getElementById('inf-lives-hud').style.display='none';
   resetStage();
   showScreen('s-game');
-  document.getElementById('stage-title').textContent = `스테이지 ${id} · ${currentStage.name}`;
-  const gc = currentStage.goals.length;
-  document.getElementById('stage-goal').textContent = `⭐ 별 ${gc}개를 모아요`;
+  document.getElementById('stage-title').textContent=`스테이지 ${id} · ${currentStage.name}`;
+  document.getElementById('stage-goal').textContent=`⭐ 별 ${currentStage.goals.length}개를 모아요`;
 }
 
-function resetStage() {
-  robotPos = {...currentStage.start};
-  remainGoals = currentStage.goals.map(g=>({...g}));
-  commands = [];
-  running = false;
-  renderGrid();
-  renderQueue();
-  setRunnable(true);
+function resetStage(){
+  robotPos={...currentStage.start};
+  remainGoals=currentStage.goals.map(g=>({...g}));
+  commands=[]; running=false;
+  renderGrid(); renderQueue(); setRunnable(true);
 }
 
-function retryStage() {
+function retryStage(){ closeAllPopups(); resetStage(); }
+
+function nextStage(){
   closeAllPopups();
+  if(infiniteMode){ infStage++; loadInfiniteStage(); return; }
+  const next=currentStage.id+1;
+  if(next<=STAGES.length) loadStage(next); else goHome();
+}
+
+/* ══════════════════
+   무한 모드
+══════════════════ */
+function startInfiniteMode(){
+  infiniteMode=true; infStage=1; infLives=3;
+  goHome(); // close any popups
+  loadInfiniteStage();
+  showScreen('s-game');
+}
+
+function loadInfiniteStage(){
+  failCount=0;
+  currentStage=generateInfiniteStage(infStage);
   resetStage();
+
+  document.getElementById('stage-title').textContent=`무한 ${infStage}단계`;
+  document.getElementById('stage-goal').textContent=`⭐ 별 ${currentStage.goals.length}개 · ${currentStage.theme||''}`;
+  document.getElementById('inf-badge').style.display='inline-block';
+  updateInfHud();
 }
 
-function nextStage() {
-  closeAllPopups();
-  const next = currentStage.id + 1;
-  if (next <= STAGES.length) loadStage(next);
-  else goHome();
+function updateInfHud(){
+  const hud=document.getElementById('inf-lives-hud');
+  hud.style.display='block';
+  hud.textContent='❤️'.repeat(infLives)+'🖤'.repeat(3-infLives);
 }
+
+/* ── 맵 생성 ── */
+function generateInfiniteStage(n){
+  // 난이도 파라미터
+  const tier  = Math.floor((n-1)/5);               // 0,1,2,3,4...
+  const sizes = [[2,3],[3,3],[3,4],[4,4],[4,5],[5,5]];
+  const [rows,cols] = sizes[Math.min(tier, sizes.length-1)];
+  const starCount   = Math.min(1+Math.floor((n-1)/8), 3);
+  const obsCount    = Math.min(Math.floor((n-1)/3), Math.floor(rows*cols*0.28));
+
+  // 테마 라벨
+  const themeIdx = starCount===1? (obsCount<2?0:3) : starCount===2?1: 2;
+  const theme = INF_THEMES[Math.min(themeIdx, INF_THEMES.length-1)].label;
+
+  let attempts=0, result=null;
+  while(!result && attempts<30){
+    attempts++;
+    result=tryGenerate(rows,cols,starCount,obsCount);
+  }
+  if(!result) result={rows,cols,start:{r:0,c:0},goals:[{r:rows-1,c:cols-1}],obstacles:[]};
+  result.bestCount = starCount*3 + obsCount + Math.floor(rows+cols);
+  result.theme = theme;
+
+  // 힌트 생성 (BFS 풀이)
+  generatedHints = generateHints(result);
+  return result;
+}
+
+function tryGenerate(rows,cols,starCount,obsCount){
+  const start={r:0,c:0};
+  const used=new Set(['0,0']);
+
+  // 별 배치 (시작점 제외, 맵 가장자리 선호)
+  const goals=[];
+  const candidates=[];
+  for(let r=0;r<rows;r++) for(let c=0;c<cols;c++) if(!(r===0&&c===0)) candidates.push({r,c});
+  shuffle(candidates);
+  for(const pos of candidates){
+    if(goals.length>=starCount) break;
+    goals.push(pos); used.add(`${pos.r},${pos.c}`);
+  }
+  if(goals.length<starCount) return null;
+
+  // 장애물 배치
+  const obstacles=[];
+  const obsPool=candidates.filter(p=>!used.has(`${p.r},${p.c}`));
+  shuffle(obsPool);
+  for(const pos of obsPool){
+    if(obstacles.length>=obsCount) break;
+    obstacles.push(pos);
+    if(!allReachable(rows,cols,start,goals,obstacles)){
+      obstacles.pop();
+    } else {
+      used.add(`${pos.r},${pos.c}`);
+    }
+  }
+
+  return {rows,cols,start,goals,obstacles};
+}
+
+function allReachable(rows,cols,start,goals,obstacles){
+  const obsSet=new Set(obstacles.map(o=>`${o.r},${o.c}`));
+  return goals.every(g=>bfsReachable(rows,cols,start,g,obsSet));
+}
+
+function bfsReachable(rows,cols,start,goal,obsSet){
+  if(obsSet.has(`${goal.r},${goal.c}`)) return false;
+  const visited=new Set([`${start.r},${start.c}`]);
+  const q=[start];
+  while(q.length){
+    const {r,c}=q.shift();
+    if(r===goal.r&&c===goal.c) return true;
+    for(const [dr,dc] of [[-1,0],[1,0],[0,-1],[0,1]]){
+      const nr=r+dr,nc=c+dc,key=`${nr},${nc}`;
+      if(nr>=0&&nr<rows&&nc>=0&&nc<cols&&!obsSet.has(key)&&!visited.has(key)){
+        visited.add(key); q.push({r:nr,c:nc});
+      }
+    }
+  }
+  return false;
+}
+
+/* BFS 솔버 → 힌트 생성 */
+function generateHints(stage){
+  const {rows,cols,start,goals,obstacles}=stage;
+  const obsSet=new Set(obstacles.map(o=>`${o.r},${o.c}`));
+  const allMask=(1<<goals.length)-1;
+  const goalMap=new Map(goals.map((g,i)=>[`${g.r},${g.c}`,i]));
+
+  const initMask=goalMap.has(`${start.r},${start.c}`)?(1<<goalMap.get(`${start.r},${start.c}`)):0;
+  const q=[{r:start.r,c:start.c,mask:initMask,path:[]}];
+  const visited=new Set([`${start.r},${start.c},${initMask}`]);
+
+  while(q.length){
+    const {r,c,mask,path}=q.shift();
+    if(mask===allMask){
+      // 힌트 3단계 생성
+      const dir1=path[0]?DIR[path[0]].emoji:'?';
+      const first3=path.slice(0,3).map(d=>DIR[d].emoji).join('');
+      const all=path.map(d=>DIR[d].emoji).join('');
+      return [
+        `먼저 ${dir1} 방향으로 가봐요!`,
+        `처음 ${Math.min(3,path.length)}번의 명령: ${first3}`,
+        `정답 (${path.length}번): ${all}`,
+      ];
+    }
+    for(const [d,{dr,dc}] of Object.entries(DIR)){
+      const nr=r+dr,nc=c+dc,key=`${nr},${nc}`;
+      if(nr>=0&&nr<rows&&nc>=0&&nc<cols&&!obsSet.has(key)){
+        let nm=mask;
+        const gi=goalMap.get(key);
+        if(gi!==undefined) nm|=(1<<gi);
+        const sk=`${nr},${nc},${nm}`;
+        if(!visited.has(sk)){
+          visited.add(sk);
+          q.push({r:nr,c:nc,mask:nm,path:[...path,d]});
+        }
+      }
+    }
+  }
+  return ['별을 향해 이동해봐요!','막히면 돌아가는 길을 찾아요.','힌트를 쓰기엔 이 맵이 너무 복잡해요!'];
+}
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a;}
 
 /* ══════════════════
    그리드 렌더링
 ══════════════════ */
-function renderGrid() {
-  const s = currentStage;
-  const grid = document.getElementById('game-grid');
+function renderGrid(){
+  const s=currentStage;
+  const grid=document.getElementById('game-grid');
+  const maxW=Math.min(window.innerWidth-32,340);
+  const maxH=260;
+  const cellByW=Math.floor((maxW-(s.cols-1)*4)/s.cols);
+  const cellByH=Math.floor((maxH-(s.rows-1)*4)/s.rows);
+  const cellSize=Math.min(cellByW,cellByH,100);
+  const robotImgSize=Math.floor(cellSize*.78);
+  const fontSize=Math.floor(cellSize*.55);
 
-  // 셀 크기 계산 (가로·세로 양쪽 제한 후 최솟값 사용)
-  const maxW = Math.min(window.innerWidth - 32, 340);
-  const maxH = 260;
-  const cellByW = Math.floor((maxW - (s.cols - 1) * 4) / s.cols);
-  const cellByH = Math.floor((maxH - (s.rows - 1) * 4) / s.rows);
-  const cellSize = Math.min(cellByW, cellByH, 100);
-  grid.style.gridTemplateColumns = `repeat(${s.cols}, ${cellSize}px)`;
+  grid.style.gridTemplateColumns=`repeat(${s.cols},${cellSize}px)`;
 
-  let html = '';
-  for (let r = 0; r < s.rows; r++) {
-    for (let c = 0; c < s.cols; c++) {
-      const isRobot = robotPos.r === r && robotPos.c === c;
-      const isGoal = remainGoals.some(g => g.r === r && g.c === c);
-      const isObs = s.obstacles.some(o => o.r === r && o.c === c);
+  let html='';
+  for(let r=0;r<s.rows;r++){
+    for(let c=0;c<s.cols;c++){
+      const isRobot   = robotPos.r===r && robotPos.c===c;
+      const isGoal    = remainGoals.some(g=>g.r===r&&g.c===c);
+      const isObs     = s.obstacles.some(o=>o.r===r&&o.c===c);
       const isCollected = s.goals.some(g=>g.r===r&&g.c===c) && !isGoal && !isRobot;
       let cls='cell', content='';
-      if (isRobot) { cls+=' robot'; content='🤖'; }
-      else if (isGoal) { cls+=' goal'; content='⭐'; }
-      else if (isObs) { cls+=' obstacle'; content='🪨'; }
-      else if (isCollected) { cls+=' collected'; content='✨'; }
-      html += `<div class="${cls}" style="width:${cellSize}px;height:${cellSize}px;font-size:${Math.floor(cellSize*.55)}px">${content}</div>`;
+      if(isRobot){
+        cls+=' robot';
+        content=`<img class="robot-img" src="icons/robot-char.png" style="width:${robotImgSize}px;height:${robotImgSize}px" />`;
+      } else if(isGoal){
+        cls+=' goal'; content=`<span style="font-size:${fontSize}px">⭐</span>`;
+      } else if(isObs){
+        cls+=' obstacle'; content=`<span style="font-size:${fontSize}px">🪨</span>`;
+      } else if(isCollected){
+        cls+=' collected'; content=`<span style="font-size:${Math.floor(fontSize*.7)}px">✨</span>`;
+      }
+      html+=`<div class="${cls}" style="width:${cellSize}px;height:${cellSize}px">${content}</div>`;
     }
   }
-  grid.innerHTML = html;
+  grid.innerHTML=html;
 }
 
 /* ══════════════════
    명령 관리
 ══════════════════ */
-const MAX_CMD = 20;
+const MAX_CMD=25;
+function addCmd(dir){ if(running||commands.length>=MAX_CMD) return; commands.push(dir); renderQueue(); }
+function delCmd()  { if(running||commands.length===0) return; commands.pop(); renderQueue(); }
+function clearCmds(){ if(running) return; commands=[]; renderQueue(); }
 
-function addCmd(dir) {
-  if (running || commands.length >= MAX_CMD) return;
-  commands.push(dir);
-  renderQueue();
-}
-function delCmd() {
-  if (running || commands.length === 0) return;
-  commands.pop();
-  renderQueue();
-}
-function clearCmds() {
-  if (running) return;
-  commands = [];
-  renderQueue();
-}
-
-function renderQueue() {
-  const q = document.getElementById('cmd-queue');
-  if (commands.length === 0) {
-    q.innerHTML = '<span class="cmd-empty">명령 버튼을 눌러 추가해봐요!</span>';
-  } else {
-    q.innerHTML = commands.map((d,i) => `
-      <div class="cmd-item">
-        <span class="cmd-emoji">${DIR[d].emoji}</span>
-        <span class="cmd-text">${DIR[d].label}</span>
-      </div>`).join('');
-    q.scrollLeft = q.scrollWidth;
-  }
+function renderQueue(){
+  const q=document.getElementById('cmd-queue');
+  if(!commands.length){ q.innerHTML='<span class="cmd-empty">명령 버튼을 눌러 추가해봐요!</span>'; return; }
+  q.innerHTML=commands.map(d=>`
+    <div class="cmd-item">
+      <span class="cmd-emoji">${DIR[d].emoji}</span>
+      <span class="cmd-text">${DIR[d].label}</span>
+    </div>`).join('');
+  q.scrollLeft=q.scrollWidth;
 }
 
 /* ══════════════════
    실행
 ══════════════════ */
-function setRunnable(on) {
-  document.getElementById('btn-run').disabled = !on;
-  document.querySelectorAll('.cmd-btn').forEach(b => b.disabled = !on);
+function setRunnable(on){
+  document.getElementById('btn-run').disabled=!on;
+  document.querySelectorAll('.cmd-btn').forEach(b=>b.disabled=!on);
 }
 
-async function runCommands() {
-  if (running || commands.length === 0) return;
-  running = true;
-  setRunnable(false);
-
-  for (const cmd of commands) {
-    const {dr, dc} = DIR[cmd];
-    const nr = robotPos.r + dr;
-    const nc = robotPos.c + dc;
-
-    // 이동 가능 여부 (막히면 그냥 스킵)
-    const inBounds = nr >= 0 && nr < currentStage.rows && nc >= 0 && nc < currentStage.cols;
-    const blocked = currentStage.obstacles.some(o => o.r === nr && o.c === nc);
-
-    if (inBounds && !blocked) {
-      robotPos = {r: nr, c: nc};
-      // 별 수집
-      const gi = remainGoals.findIndex(g => g.r === nr && g.c === nc);
-      if (gi !== -1) remainGoals.splice(gi, 1);
+async function runCommands(){
+  if(running||!commands.length) return;
+  running=true; setRunnable(false);
+  for(const cmd of commands){
+    const {dr,dc}=DIR[cmd];
+    const nr=robotPos.r+dr, nc=robotPos.c+dc;
+    const inBounds=nr>=0&&nr<currentStage.rows&&nc>=0&&nc<currentStage.cols;
+    const blocked=currentStage.obstacles.some(o=>o.r===nr&&o.c===nc);
+    if(inBounds&&!blocked){
+      robotPos={r:nr,c:nc};
+      const gi=remainGoals.findIndex(g=>g.r===nr&&g.c===nc);
+      if(gi!==-1) remainGoals.splice(gi,1);
     }
-
     renderGrid();
     await sleep(420);
-
-    if (remainGoals.length === 0) { showSuccess(); return; }
+    if(!remainGoals.length){ showSuccess(); return; }
   }
-
-  running = false;
-  if (remainGoals.length > 0) showFailure();
+  running=false;
+  if(remainGoals.length) showFailure();
 }
 
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 
 /* ══════════════════
    성공 / 실패
 ══════════════════ */
-function calcStars() {
-  const used = commands.length;
-  const best = currentStage.bestCount;
-  if (used <= best) return 3;
-  if (used <= best * 1.5) return 2;
+function calcStars(){
+  const used=commands.length, best=currentStage.bestCount;
+  if(used<=best) return 3;
+  if(used<=best*1.6) return 2;
   return 1;
 }
 
-function showSuccess() {
-  running = false;
-  const stars = calcStars();
-  const prev = progress.stars[currentStage.id] || 0;
-  const isNew = stars > prev;
-  if (isNew) progress.stars[currentStage.id] = stars;
-
-  // 다음 스테이지 해금
-  const nextId = currentStage.id + 1;
-  if (nextId <= STAGES.length && !progress.unlocked.includes(nextId))
-    progress.unlocked.push(nextId);
-  saveProgress();
-
-  const emojis = ['⭐','🌟','✨'];
-  document.getElementById('suc-emoji').textContent = stars === 3 ? '🎉' : stars === 2 ? '🥳' : '😊';
-  document.getElementById('suc-title').textContent = stars === 3 ? '완벽해요!' : stars === 2 ? '잘했어요!' : '성공!';
-  document.getElementById('suc-stars').textContent = '⭐'.repeat(stars) + '☆'.repeat(3-stars);
-  const msg = failCount > 0
-    ? DEBUG_MSGS[Math.floor(Math.random()*DEBUG_MSGS.length)]
-    : SUCCESS_MSGS[Math.floor(Math.random()*SUCCESS_MSGS.length)];
-  document.getElementById('suc-msg').textContent = msg + (isNew && stars===3 ? ' 🏆 최고 기록!' : '');
-
-  const btnNext = document.getElementById('btn-next');
-  if (nextId <= STAGES.length) {
-    btnNext.textContent = `다음 스테이지 ${nextId} →`;
-    btnNext.style.display = '';
-  } else {
-    btnNext.textContent = '🏁 모든 스테이지 클리어!';
+function showSuccess(){
+  running=false;
+  if(infiniteMode){
+    // 무한모드 성공
+    if(infStage>infBest) saveInfBest(infStage);
+    document.getElementById('suc-emoji').textContent='🎉';
+    document.getElementById('suc-title').textContent=`${infStage}단계 클리어!`;
+    document.getElementById('suc-stars').textContent='';
+    document.getElementById('suc-msg').textContent=`${infStage>infBest?'🏆 신기록! ':''}다음 단계가 더 어려워질 거예요!`;
+    document.getElementById('btn-next').textContent=`무한 ${infStage+1}단계 →`;
+    document.getElementById('pop-success').classList.add('show');
+    return;
   }
+  // 일반 스테이지
+  const stars=calcStars();
+  const prev=progress.stars[currentStage.id]||0;
+  if(stars>prev) progress.stars[currentStage.id]=stars;
+  const nextId=currentStage.id+1;
+  if(nextId<=STAGES.length&&!progress.unlocked.includes(nextId)) progress.unlocked.push(nextId);
+  saveProgress();
+  document.getElementById('suc-emoji').textContent=stars===3?'🎉':stars===2?'🥳':'😊';
+  document.getElementById('suc-title').textContent=stars===3?'완벽해요!':stars===2?'잘했어요!':'성공!';
+  document.getElementById('suc-stars').textContent='⭐'.repeat(stars)+'☆'.repeat(3-stars);
+  document.getElementById('suc-msg').textContent=(failCount>0?DEBUG_MSGS:SUC_MSGS)[Math.floor(Math.random()*(failCount>0?DEBUG_MSGS:SUC_MSGS).length)];
+  const btnNext=document.getElementById('btn-next');
+  btnNext.textContent=nextId<=STAGES.length?`다음 스테이지 ${nextId} →`:'🏁 모든 스테이지 클리어!';
   document.getElementById('pop-success').classList.add('show');
 }
 
-function showFailure() {
+function showFailure(){
   failCount++;
-  document.getElementById('fail-msg').textContent = FAIL_MSGS[Math.min(failCount-1, FAIL_MSGS.length-1)];
+  if(infiniteMode){
+    infLives--;
+    updateInfHud();
+    if(infLives<=0){ showGameOver(); return; }
+    document.getElementById('fail-lives').style.display='block';
+    document.getElementById('fail-lives').textContent='❤️'.repeat(infLives)+'🖤'.repeat(3-infLives);
+    document.getElementById('fail-msg').textContent=`라이프가 줄었어요! 남은 라이프: ${infLives}개`;
+  } else {
+    document.getElementById('fail-lives').style.display='none';
+    document.getElementById('fail-msg').textContent=FAIL_MSGS[Math.min(failCount-1,FAIL_MSGS.length-1)];
+  }
   document.getElementById('pop-fail').classList.add('show');
+}
+
+function showGameOver(){
+  const isNew = infStage > infBest;
+  if(isNew) saveInfBest(infStage);
+  document.getElementById('gameover-score').textContent=`${infStage}단계`;
+  document.getElementById('gameover-best').textContent=isNew?`🏆 새로운 최고기록!`:`최고기록: ${infBest}단계`;
+  document.getElementById('pop-gameover').classList.add('show');
 }
 
 /* ══════════════════
    힌트
 ══════════════════ */
-function openHint() {
+function openHint(){
   closePopup('pop-fail');
-  const hints = currentStage.hints;
-  const available = Math.min(failCount + 1, hints.length);
-  document.getElementById('hint-steps').innerHTML = hints.map((h,i) => {
-    if (i < available) {
-      return `<div class="hint-row"><span class="hint-num">${i+1}</span><span>${h}</span></div>`;
-    }
-    return `<div class="hint-row"><span class="hint-num">${i+1}</span><span class="hint-locked">🔒 한 번 더 도전하면 열려요!</span></div>`;
-  }).join('');
+  const hints=generatedHints||[];
+  const available=Math.min(failCount+1, hints.length);
+  document.getElementById('hint-steps').innerHTML=hints.map((h,i)=>
+    i<available
+      ? `<div class="hint-row"><span class="hint-num">${i+1}</span><span>${h}</span></div>`
+      : `<div class="hint-row"><span class="hint-num">${i+1}</span><span class="hint-locked">🔒 한 번 더 도전하면 열려요!</span></div>`
+  ).join('');
   document.getElementById('pop-hint').classList.add('show');
 }
 
 /* ══════════════════
    유틸
 ══════════════════ */
-function showScreen(id) {
+function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
-function closePopup(id) { document.getElementById(id).classList.remove('show'); }
-function closeAllPopups() {
-  ['pop-success','pop-fail','pop-hint'].forEach(id => closePopup(id));
+function closePopup(id){ document.getElementById(id).classList.remove('show'); }
+function closeAllPopups(){
+  ['pop-success','pop-fail','pop-gameover','pop-hint'].forEach(id=>closePopup(id));
 }
 
 // 별 배경
 (function(){
-  const c = document.getElementById('stars');
+  const c=document.getElementById('stars');
   for(let i=0;i<160;i++){
     const s=document.createElement('span'); s.className='star';
     const sz=Math.random()*2+.5;
@@ -619,9 +790,7 @@ function closeAllPopups() {
   }
 })();
 
-// 초기 렌더
 renderHome();
-
 if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
 </script>
 </body>
